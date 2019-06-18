@@ -4,9 +4,9 @@ WORKDIR /go/src/app
 COPY . .
 RUN go get -d -v ./...
 RUN go install -v ./...
-RUN go build -o ../php-fpm_exporter main.go
+RUN go build -o ./php-fpm_exporter main.go
 
-FROM alpine:3.9
+FROM alpine:3.8
 
 ARG BUILD_DATE
 ARG VCS_REF
