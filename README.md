@@ -1,5 +1,9 @@
 # php-fpm_exporter
 
+
+Внесена правка для биндинга веб сервера, который метрики отдаём на IP v4
+
+
 [![CircleCI](https://circleci.com/gh/hipages/php-fpm_exporter.svg?style=shield)](https://circleci.com/gh/hipages/php-fpm_exporter)
 [![Go Report Card](https://goreportcard.com/badge/github.com/hipages/php-fpm_exporter)](https://goreportcard.com/report/github.com/hipages/php-fpm_exporter)
 [![GoDoc](https://godoc.org/github.com/hipages/php-fpm_exporter?status.svg)](https://godoc.org/github.com/hipages/php-fpm_exporter)
@@ -43,6 +47,7 @@ The `server` command runs the server required for prometheus to retrieve the sta
 | `--phpfpm.scrape-uri`  | FastCGI address, e.g. unix:///tmp/php.sock;/status or tcp://127.0.0.1:9000/status | `PHP_FPM_SCRAPE_URI` | `tcp://127.0.0.1:9000/status` |
 | `--phpfpm.fix-process-count`  | Enable to calculate process numbers via php-fpm_exporter since PHP-FPM sporadically reports wrong active/idle/total process numbers. | `PHP_FPM_FIX_PROCESS_COUNT`| `false` |
 | `--log.level`          | Only log messages with the given severity or above. Valid levels: [debug, info, warn, error, fatal] (default "error") | `PHP_FPM_LOG_LEVEL` | info |
+| `--ipv4`              |   Использовать только IPv4 для биндинга сервера  |  |  |
 
 ### Why `--phpfpm.fix-process-count`?
 
