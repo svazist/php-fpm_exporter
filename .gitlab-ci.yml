@@ -1,0 +1,27 @@
+stages:
+  - testing
+  - build
+  - package
+
+build_image:
+  image: docker
+  stage: build
+  tags:
+    - docker
+  services:
+    - docker:dind
+  variables:
+    GIT_STRATEGY: 'clone'
+    GIT_CHECKOUT: 'true'
+    BUILD_NAME: '$DOCKER_ENV_CI_REGISTRY_IMAGE:latest'
+  before_script:
+    - docker version
+    - docker login -u $CI_REGISTRY_USER -p $CI_BUILD_TOKEN $CI_REGISTRY_IMAGE
+  script:
+    - docker build -t $BUILD_NAME .
+    - docker push $BUILD_NAME
+  except:
+    changes:
+      - "*.md"
+      - "**/*.md"
+      - ".gitignore"
