@@ -15,7 +15,7 @@ ARG VERSION
 COPY --from=build /go/src/app/php-fpm_exporter /
 
 EXPOSE     9253
-ENTRYPOINT [ "/php-fpm_exporter", "server" ]
+CMD [ "/php-fpm_exporter", "server" ]
 
 LABEL org.label-schema.build-date=$BUILD_DATE \
       org.label-schema.name="php-fpm_exporter" \
