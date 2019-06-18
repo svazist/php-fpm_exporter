@@ -15,8 +15,7 @@ package main
 
 import (
 	"fmt"
-
-	"github.com/hipages/php-fpm_exporter/cmd"
+	"./cmd"
 )
 
 var (

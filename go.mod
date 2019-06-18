@@ -1,4 +1,4 @@
-module github.com/hipages/php-fpm_exporter
+module github.com/svazist/php-fpm_exporter
 
 require (
 	github.com/davecgh/go-spew v1.1.1
