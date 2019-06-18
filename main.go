@@ -15,7 +15,8 @@ package main
 
 import (
 	"fmt"
-	"./cmd"
+
+	"github.com/svazist/php-fpm_exporter/cmd"
 )
 
 var (
