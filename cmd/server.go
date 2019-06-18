@@ -15,6 +15,7 @@ package cmd
 
 import (
 	"context"
+	"net"
 	"net/http"
 	"os"
 	"os/signal"
@@ -32,6 +33,9 @@ var (
 	metricsEndpoint  string
 	scrapeURIs       []string
 	fixProcessCount  bool
+	ipv4Only  bool
+	srv *http.Server
+ 	listener net.Listener
 )
 
 // serverCmd represents the server command
@@ -62,13 +66,27 @@ to quickly create a Cobra application.`,
 
 		prometheus.MustRegister(exporter)
 
-		srv := &http.Server{
-			Addr: listeningAddress,
+		srv = &http.Server{
 			// Good practice to set timeouts to avoid Slowloris attacks.
 			WriteTimeout: time.Second * 15,
 			ReadTimeout:  time.Second * 15,
 			IdleTimeout:  time.Second * 60,
 		}
+
+		var protocol string
+		if ipv4Only {
+			protocol = "tcp4"
+		} else {
+			protocol = "tcp"
+		}
+
+		listener, err := net.Listen(protocol, listeningAddress)
+
+		if err != nil {
+			log.Fatal(err)
+		}
+
+
 
 		http.Handle(metricsEndpoint, promhttp.Handler())
 		http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
@@ -83,7 +101,7 @@ to quickly create a Cobra application.`,
 
 		// Run our server in a goroutine so that it doesn't block.
 		go func() {
-			if err := srv.ListenAndServe(); err != nil {
+			if err := srv.Serve(listener); err != nil {
 				log.Error(err)
 			}
 		}()
@@ -120,6 +138,7 @@ func init() {
 	serverCmd.Flags().StringVar(&metricsEndpoint, "web.telemetry-path", "/metrics", "Path under which to expose metrics.")
 	serverCmd.Flags().StringSliceVar(&scrapeURIs, "phpfpm.scrape-uri", []string{"tcp://127.0.0.1:9000/status"}, "FastCGI address, e.g. unix:///tmp/php.sock;/status or tcp://127.0.0.1:9000/status")
 	serverCmd.Flags().BoolVar(&fixProcessCount, "phpfpm.fix-process-count", false, "Enable to calculate process numbers via php-fpm_exporter since PHP-FPM sporadically reports wrong active/idle/total process numbers.")
+	serverCmd.Flags().BoolVar(&ipv4Only, "phpfpm.ipv4", false, "IP v4 bind only")
 
 	//viper.BindEnv("web.listen-address", "PHP_FPM_WEB_LISTEN_ADDRESS")
 	//viper.BindPFlag("web.listen-address", serverCmd.Flags().Lookup("web.listen-address"))

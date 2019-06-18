@@ -56,6 +56,7 @@ func init() {
 
 	RootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.php-fpm_exporter.yaml)")
 	RootCmd.PersistentFlags().StringVar(&logLevel, "log.level", "info", "Only log messages with the given severity or above. Valid levels: [debug, info, warn, error, fatal]")
+	RootCmd.PersistentFlags().BoolVar(&ipv4Only, "ipv4", false, "bind IpV4 only")
 }
 
 // initConfig reads in config file and ENV variables if set.
