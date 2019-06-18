@@ -13,7 +13,7 @@ build_image:
   variables:
     GIT_STRATEGY: 'clone'
     GIT_CHECKOUT: 'true'
-    BUILD_NAME: "$DOCKER_ENV_CI_REGISTRY_IMAGE:latest"
+    BUILD_NAME: "$DOCKER_ENV_CI_REGISTRY_IMAGE"
   before_script:
     - docker version
     - docker login -u $CI_REGISTRY_USER -p $CI_BUILD_TOKEN $CI_REGISTRY_IMAGE
